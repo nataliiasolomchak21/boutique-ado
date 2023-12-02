@@ -3,6 +3,8 @@ from decimal import Decimal
 
 # Import the 'settings' module from 'django.conf' to access project settings
 from django.conf import settings
+from django.shortcuts import get_object_or_404
+from products.models import Product
 
 # Define a function named 'bag_contents' that takes a 'request' as a parameter
 def bag_contents(request):
@@ -13,6 +15,17 @@ def bag_contents(request):
     # Initialize variables for total cost, total product count, and grand total
     total = 0
     product_count = 0
+    bag = request.session.get('bag', {})
+
+    for item_id, quantity in bag.items():
+        product = get_object_or_404(Product, pk=item_id)
+        total += quantity * product.price
+        product_count += quantity
+        bag_items.append({
+            'item_id': item_id,
+            'quantity': quantity,
+            'product': product,
+        })
 
     # Check if the total cost is less than the FREE_DELIVERY_THRESHOLD from project settings
     if total < settings.FREE_DELIVERY_THRESHOLD:

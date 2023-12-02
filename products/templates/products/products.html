@@ -122,31 +122,48 @@
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript">
-		$('.btt-link').click(function(e) {
-			window.scrollTo(0,0)
-		})
-	</script>
-    
-    <script type="text/javascript">
-        $('#sort-selector').change(function() {
-            var selector = $(this);
-            var currentUrl = new URL(window.location);
-
-            var selectedVal = selector.val();
-            if(selectedVal != "reset"){
-                var sort = selectedVal.split("_")[0];
-                var direction = selectedVal.split("_")[1];
-
-                currentUrl.searchParams.set("sort", sort);
-                currentUrl.searchParams.set("direction", direction);
-
-                window.location.replace(currentUrl);
-            } else {
-                currentUrl.searchParams.delete("sort");
-                currentUrl.searchParams.delete("direction");
-
-                window.location.replace(currentUrl);
-            }
+        // Scroll to top functionality when elements with class 'btt-link' are clicked
+        $('.btt-link').click(function(e) {
+            // Scroll to the top of the page
+            window.scrollTo(0, 0);
         })
     </script>
+    
+    <script type="text/javascript">
+        // Handle change event on element with ID 'sort-selector'
+        // This script manages a dropdown menu with ID 'sort-selector.'
+    $('#sort-selector').change(function() {
+        // When the dropdown selection changes...
+
+        // Get the dropdown element
+        var selector = $(this);
+
+        // Get the current URL of the page
+        var currentUrl = new URL(window.location);
+
+        // Get the selected value from the dropdown
+        var selectedVal = selector.val();
+
+        // Check if the selected value is not "reset"
+        if (selectedVal != "reset") {
+            // If not "reset," extract sort and direction values from the selected value
+            var sort = selectedVal.split("_")[0];
+            var direction = selectedVal.split("_")[1];
+
+            // Update the URL with new sort and direction parameters
+            currentUrl.searchParams.set("sort", sort);
+            currentUrl.searchParams.set("direction", direction);
+
+            // Reload the page with the updated URL
+            window.location.replace(currentUrl);
+        } else {
+            // If "reset" is selected, remove sort and direction parameters from the URL
+            currentUrl.searchParams.delete("sort");
+            currentUrl.searchParams.delete("direction");
+
+            // Reload the page with the updated URL (without sort and direction parameters)
+            window.location.replace(currentUrl);
+        }
+    })
+    </script>    
 {% endblock %}

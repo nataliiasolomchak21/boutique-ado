@@ -59,6 +59,12 @@ class StripeWH_Handler:
             if value == "":
                 shipping_details.address[field] = None
 
+        # Extract the correct two-character country code
+        country_code = billing_details.address.get('country', '')
+        if len(country_code) == 3 and country_code.isalpha():
+            country_code = country_code.upper()  # Ensure it's in uppercase
+            billing_details.address['country'] = country_code
+
         # Update profile information if save_info was checked
         profile = None
         username = intent.metadata.username
